@@ -58,3 +58,7 @@
   display: flex;
   flex-direction: column;
 }
+
+.signup-link {
+  margin-top: 40px;
+}

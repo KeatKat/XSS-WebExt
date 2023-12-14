@@ -1,6 +1,7 @@
 // src/Login.js
-import React, { useState } from "react";
-import "./Login.css";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import './Login.css';
 
 function Login() {
   const [errorMessages, setErrorMessages] = useState({});
@@ -88,19 +89,27 @@ function Login() {
     </div>
   );
 
+  const renderSignupLink = (
+    <div className="signup-link">
+      New to SurfSafe? <Link to="/signup">Sign up here</Link>
+    </div>
+  );
+
   return (
     <div className="login-form">
-      <div className="title">Sign In</div>
+      <div className="title">Log in</div>
       {isSubmitted ? (
         <div>User is successfully logged in</div>
       ) : (
         <>
           {renderErrorMessage("login")}
           {renderForm}
+          {renderSignupLink}
         </>
       )}
     </div>
   );
 }
 
+console.log("login.js");
 export default Login;

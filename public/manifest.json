@@ -18,5 +18,10 @@
       "id": "login-extension@example.com",
       "strict_min_version": "42.0"
     }
-  }
+  },
+
+  "content_security_policy": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline';"
+
+  
+  
 }
