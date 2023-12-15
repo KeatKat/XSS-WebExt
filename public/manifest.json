@@ -4,14 +4,14 @@
   "version": "1.0",
   "description": "A simple login extension",
   "browser_action": {
-    "default_icon": "icon.png",
+    "default_icon": "sharkicon48.png",
     "default_popup": "index.html"
   },
   "permissions": [
     "activeTab"
   ],
   "icons": {
-    "48": "icon.png"
+    "48": "sharkicon48.png"
   },
   "applications": {
     "gecko": {

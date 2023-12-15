@@ -22,11 +22,6 @@ function Login() {
     const username = event.target.elements.username.value;
     const password = event.target.elements.password.value;
 
-    // Validate inputs
-    if (username === "" || password === "") {
-      setErrorMessages({ validation: "Username and password are required." });
-      return;
-    }
 
     // Fetch data from PHP backend
     try {
