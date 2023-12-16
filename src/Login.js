@@ -1,19 +1,20 @@
 // src/Login.js
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import './Login.css';
+import { Link, useNavigate } from 'react-router-dom';
+import './CSS/Login.css';
 
 function Login() {
   const [errorMessages, setErrorMessages] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true); // Add state for button disable
+  const navigate = useNavigate(); // React Router hook for navigation
 
   const handleInputChange = () => {
     const username = document.forms[0].elements.username.value;
     const password = document.forms[0].elements.password.value;
 
     // Enable the button only if both fields have input
-    setIsButtonDisabled(username === "" || password === "");
+    setIsButtonDisabled(username === '' || password === '');
   };
 
   const handleSubmit = async (event) => {
@@ -22,16 +23,15 @@ function Login() {
     const username = event.target.elements.username.value;
     const password = event.target.elements.password.value;
 
-
     // Fetch data from PHP backend
     try {
-      const response = await fetch("http://localhost/useraccount.php", {
-        method: "POST",
+      const response = await fetch('http://localhost/useraccount.php', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          action: "login",
+          action: 'login',
           username,
           password,
         }),
@@ -43,16 +43,17 @@ function Login() {
 
       const result = await response.json();
 
-      if (result.status === "success") {
+      if (result.status === 'success') {
         setIsSubmitted(true);
-        // Handle successful login, e.g., redirect to another page
+        // Redirect to Logon page after successful login
+        navigate('/logon');
       } else {
         setErrorMessages({ login: result.message });
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
       setErrorMessages({
-        login: "An error occurred. Please try again later.",
+        login: 'An error occurred. Please try again later.',
       });
     }
   };
@@ -66,18 +67,16 @@ function Login() {
         <div className="input-container">
           <label>Username </label>
           <input type="text" name="username" required />
-          {renderErrorMessage("validation")}
         </div>
         <div className="input-container">
           <label>Password </label>
           <input type="password" name="password" required />
-          {renderErrorMessage("validation")}
         </div>
         <div className="button-container">
           <input
             type="submit"
             value="Login"
-            disabled={isButtonDisabled} // Disable the button based on state
+            disabled={isButtonDisabled}
           />
         </div>
       </form>
@@ -97,7 +96,7 @@ function Login() {
         <div>User is successfully logged in</div>
       ) : (
         <>
-          {renderErrorMessage("login")}
+          {renderErrorMessage('login')}
           {renderForm}
           {renderSignupLink}
         </>
@@ -106,5 +105,4 @@ function Login() {
   );
 }
 
-console.log("login.js");
 export default Login;
