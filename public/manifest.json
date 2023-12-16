@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "Login Extension",
+  "version": "1.0",
+  "description": "A simple login extension",
+  "browser_action": {
+    "default_icon": "sharkicon48.png",
+    "default_popup": "index.html"
+  },
+  "permissions": [
+    "activeTab"
+  ],
+  "icons": {
+    "48": "sharkicon48.png"
+  },
+  "applications": {
+    "gecko": {
+      "id": "login-extension@example.com",
+      "strict_min_version": "42.0"
+    }
+  },
+
+  "content_security_policy": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline';"
+
+  
+  
+}
