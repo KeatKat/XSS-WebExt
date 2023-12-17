@@ -9,7 +9,7 @@ function Login() {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true); // Add state for button disable
   const navigate = useNavigate(); // React Router hook for navigation
 
-  const handleInputChange = () => {
+  const handleInputChange = () => { 
     const username = document.forms[0].elements.username.value;
     const password = document.forms[0].elements.password.value;
 
