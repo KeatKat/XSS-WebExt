@@ -46,7 +46,12 @@ function Signup() {
 
     // Fetch data from PHP backend
     try {
-      const response = await fetch('http://localhost/useraccount.php', {
+      console.log('Request Payload:', JSON.stringify({
+        action: 'signup',
+        ...formData,
+      }));
+      
+      const response = await fetch('http://localhost:8081/useraccount', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,6 +61,7 @@ function Signup() {
           ...formData,
         }),
       });
+      
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -64,7 +70,7 @@ function Signup() {
       const result = await response.json();
       console.log(result);
 
-      if (result.status === 'success') {
+      if (result.status === 200) {
         setIsSubmitted(true);
         // Handle successful signup, e.g., redirect to another page
       } else {

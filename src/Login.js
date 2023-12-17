@@ -25,9 +25,10 @@ function Login() {
 
     // Fetch data from PHP backend
     try {
-      const response = await fetch('http://localhost/useraccount.php', {
+      const response = await fetch('http://localhost:8081/useraccount', {
         method: 'POST',
         headers: {
+          Accept: "application/json",
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -41,15 +42,19 @@ function Login() {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      const result = await response.json();
+      //const result = await response.json();
 
-      if (result.status === 'success') {
+      //const result = await response.json();
+
+      if (response.status === 200) {
         setIsSubmitted(true);
         // Redirect to Logon page after successful login
-        navigate('/logon');
+        console.log("success");
+        router.push("/logon");
       } else {
-        setErrorMessages({ login: result.message });
-      }
+        setErrorMessages({ login: response.message });
+      } 
+
     } catch (error) {
       console.error('Error:', error);
       setErrorMessages({
