@@ -89,3 +89,28 @@
     bottom: 50%;
   }
   
+/* Sidebar.css */
+/* ... existing styles ... */
+
+  .submenu {
+    list-style: none;
+    padding-left: 15px; /* Add some left padding to the submenu for better indentation */
+  }
+
+  .submenu li {
+    margin-bottom: 5px; /* Adjust the margin between submenu items */
+  }
+
+  .submenu a {
+    font-size: 14px; /* Set the font size for submenu items */
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+  }
+
+  .submenu a:hover {
+    color: #fff;
+    background-color: #333; /* Add background color on hover for better visibility */
+  }
+
+  /* ... existing styles ... */

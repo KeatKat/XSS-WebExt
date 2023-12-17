@@ -7,6 +7,9 @@ cd backend
 npm install
 npm start
 
+npm install mysql. if error message says module missing.
+
+
 cd XSS-WebExt(parent directory)
 npm start
 
