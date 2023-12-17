@@ -70,7 +70,7 @@ function Signup() {
       const result = await response.json();
       console.log(result);
 
-      if (result.status === 200) {
+      if (result.status === 2000) {
         setIsSubmitted(true);
         // Handle successful signup, e.g., redirect to another page
       } else {
