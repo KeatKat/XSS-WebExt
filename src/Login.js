@@ -50,7 +50,7 @@ function Login() {
         setIsSubmitted(true);
         // Redirect to Logon page after successful login
         console.log("success");
-        router.push("/logon");
+        navigate("/Logon.js");
       } else {
         setErrorMessages({ login: response.message });
       } 
