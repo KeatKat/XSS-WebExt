@@ -19,6 +19,7 @@ function Sidebar() {
       <ul className="menu">
         <li><Link to="/logon">Home</Link></li>
         <li><Link to="/view-profile">View Profile</Link></li>
+        <li><Link to="/threat-management">Threat Management</Link></li>
       </ul>  
     </div>
   );

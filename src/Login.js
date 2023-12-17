@@ -41,16 +41,11 @@ function Login() {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
-      //const result = await response.json();
-
-      //const result = await response.json();
-
       if (response.status === 200) {
         setIsSubmitted(true);
         // Redirect to Logon page after successful login
         console.log("success");
-        navigate("/Logon.js");
+        navigate("/logon");
       } else {
         setErrorMessages({ login: response.message });
       } 
