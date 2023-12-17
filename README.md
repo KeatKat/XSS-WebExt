@@ -2,6 +2,14 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## To run server:
+cd backend
+npm install
+npm start
+
+cd XSS-WebExt(parent directory)
+npm start
+
 ## Available Scripts
 
 In the project directory, you can run:
