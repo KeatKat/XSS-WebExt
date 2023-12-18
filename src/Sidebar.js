@@ -29,7 +29,7 @@ function Sidebar() {
           <a>Threat Management</a>
           {threatManagementOpen && (
             <ul className="submenu">
-              <li><Link to="/threat-management/option1">Reflected-XSS</Link></li>
+              <li><Link to="/RXSS">Reflected-XSS</Link></li>
               <li><Link to="/threat-management/option2">DOM-based XSS</Link></li>
               <li><Link to="/threat-management/option3">Anti-CSRF tokens</Link></li>
               <li><Link to="/threat-management/option4">JS libary validation</Link></li>

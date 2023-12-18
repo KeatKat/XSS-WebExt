@@ -4,11 +4,15 @@
   "version": "1.0",
   "description": "A simple login extension",
   "browser_action": {
-    "default_icon": "sharkicon48.png",
+    "default_icon": {
+      "48": "sharkicon48.png"
+    },
     "default_popup": "index.html"
   },
   "permissions": [
-    "activeTab"
+    "activeTab",
+    "storage",
+    "tabs"
   ],
   "icons": {
     "48": "sharkicon48.png"
@@ -19,9 +23,14 @@
       "strict_min_version": "42.0"
     }
   },
-
-  "content_security_policy": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline';"
-
-  
-  
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
 }
