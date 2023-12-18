@@ -1,0 +1,52 @@
+/* ReflectedXSS.css */
+.RXSS-page {
+  max-width: 500px; /* Adjust this value based on your desired maximum width */
+  margin: 0 auto; /* Center the content */
+}
+
+.RXSS-content {
+  width: 400px; /* Adjust this value based on your desired fixed width */
+  margin-left: 80px; /* Adjust this value based on your sidebar width */
+  height: 500px;
+}
+
+.script-contents-display {
+  margin-top: 20px;
+}
+
+.script-content {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+/* Line numbering for <pre> */
+.script-content pre {
+  counter-reset: line;
+}
+
+.script-content pre code {
+  position: relative;
+}
+
+.script-content pre code::before {
+  content: counter(line);
+  counter-increment: line;
+  position: absolute;
+  left: -2em;
+  width: 2em;
+  text-align: right;
+  color: #999;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.navigation-buttons {
+  margin-top: 10px;
+}
+
+.navigation-buttons button {
+  margin-right: 10px;
+}
