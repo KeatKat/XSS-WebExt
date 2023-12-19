@@ -51,7 +51,7 @@ function Signup() {
         ...formData,
       }));
       
-      const response = await fetch('http://localhost:8081/useraccount', {
+      const response = await fetch('http://localhost:8081/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

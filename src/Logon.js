@@ -2,8 +2,19 @@
 import React from 'react';
 import Sidebar from './Sidebar';
 import './CSS/Logon.css';
+import { Link, useNavigate } from 'react-router-dom';
+import { Context } from "./context";
+import { useContext } from "react";
 
-function Logon() {
+const LogOn = () => {
+  const navigate = useNavigate(); 
+  const [loginUser, setLoginUser] = useContext(Context);
+  const logOut = () => {
+    setLoginUser(null);
+    navigate("/")
+    sessionStorage.removeItem("user_id");
+  }
+
   return (
     <div className="logon-page">
       <Sidebar />
@@ -15,4 +26,4 @@ function Logon() {
   );
 }
 
-export default Logon;
+export default LogOn;

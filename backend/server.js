@@ -2,6 +2,8 @@ const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
+const user = require("./user");
+const { createUser, getUserByUsername, getAllUsers } = require("./controller");
 
 const app = express();
 app.use(cors());
@@ -11,50 +13,66 @@ const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "webext"
-})
+    database: "test"
+});
 
-app.get('/', (re, res)=> {
+app.get('/', (req, res) => {
     return res.json("backend");
-})
+});
 
-app.get('/useraccount', (req, res)=>{
+app.get('/useraccount', (req, res) => {
     const sql = "select * from useraccount";
-    db.query(sql, (err, data)=>{
-        if(err) return res.json(err);
+    db.query(sql, (err, data) => {
+        if (err) return res.json(err);
         return res.json(data);
-    })
-})
+    });
+});
 
-app.post('/useraccount', async(req, res)=> {
-    const {username, password, fullname, email} = req.body;
+app.post('/signup', async (req, res) => {
+    const { username, password, fullname, email } = req.body;
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Check if the username is already taken
-    const checkUsernameQuery = "SELECT * FROM useraccount WHERE username = ?";
-    db.query(checkUsernameQuery, [username], (err, result) => {
-        if (err) {
-            return res.json({ status: "error", message: "Database error." });
-        }
-
-        if (result.length > 0) {
+    try {
+        const existingUser = await getUserByUsername(username);
+        if (existingUser) {
             return res.json({ status: "error", message: "Username is already taken. Choose another one." });
         }
 
         // Insert the user data into the database
-        const insertQuery = "INSERT INTO useraccount (username, password, fullname, email) VALUES (?, ?, ?, ?)";
-        db.query(insertQuery, [username, hashedPassword, fullname, email], (err, result) => {
-            if (err) {
-                return res.json({ status: "error", message: "Database error." });
-            }
+        createUser(username, hashedPassword, fullname, email);
 
-            return res.json({ status: "success", message: "Signup successful!" });
-        });
-    });
-})
+        return res.json({ status: "success", message: "Signup successful!" });
+    } catch (error) {
+        return res.json({ status: "error", message: "Database error." });
+    }
+});
 
-app.listen(8081, ()=>{
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    // Check if the username exists
+    try {
+        const user = await getUserByUsername(username);
+        if (!user) {
+            return res.json({ status: "error", message: "Invalid username or password." });
+        }
+
+        // Compare the provided password with the hashed password
+        const isValidPassword = await bcrypt.compare(password, user.password);
+
+        if (!isValidPassword) {
+            return res.json({ status: "error", message: "Invalid username or password." });
+        }
+
+        return res.json({ user, status: "success", message: "Login successful!" });
+    } catch (error) {
+        return res.json({ status: "error", message: "Database error." });
+    }
+});
+
+app.listen(8081, () => {
     console.log('server works');
-})
+});

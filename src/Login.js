@@ -2,50 +2,72 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './CSS/Login.css';
+import { Context } from "./context";
+import { useContext } from "react";
 
 function Login() {
   const [errorMessages, setErrorMessages] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true); // Add state for button disable
   const navigate = useNavigate(); // React Router hook for navigation
+  const [loginUser, setLoginUser] = useContext(Context);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleInputChange = () => { 
-    const username = document.forms[0].elements.username.value;
-    const password = document.forms[0].elements.password.value;
+  /*const handleInputChange = (e) => { 
+    //const username = document.forms[0].elements.username.value;
+    //const password = document.forms[0].elements.password.value;
+    setUsername(document.forms[0].elements.username.value);
+
 
     // Enable the button only if both fields have input
     setIsButtonDisabled(username === '' || password === '');
+  };*/
+
+  const handleUserChange = (e) => {
+    setUsername(e.target.value);
+    setIsButtonDisabled(username === '' || password === '');
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handlePassChange = (e) => {
+    setPassword(e.target.value);
+    setIsButtonDisabled(username === '' || password === '');
+  };
 
-    const username = event.target.elements.username.value;
-    const password = event.target.elements.password.value;
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();  
+
+    //const username = event.target.elements.username.value;
+    //const password = event.target.elements.password.value;
 
     // Fetch data from PHP backend
     try {
-      const response = await fetch('http://localhost:8081/useraccount', {
+      const response = await fetch('http://localhost:8081/login', {
         method: 'POST',
         headers: {
           Accept: "application/json",
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          action: 'login',
-          username,
-          password,
+          username: username,
+          password: password,
         }),
       });
-
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
+
       }
+      const data = await response.json();
+      console.log(data);
       if (response.status === 200) {
         setIsSubmitted(true);
+        sessionStorage.setItem("user_id", JSON.stringify(data.user));
+        setLoginUser(data.user);
         // Redirect to Logon page after successful login
-        console.log("success");
-        navigate("/logon");
+        console.log(username);
+        //getUser();
+        navigate("/viewProfile");
       } else {
         setErrorMessages({ login: response.message });
       } 
@@ -63,14 +85,14 @@ function Login() {
 
   const renderForm = (
     <div className="form">
-      <form onSubmit={handleSubmit} onChange={handleInputChange}>
+      <form onSubmit={handleSubmit}>
         <div className="input-container">
           <label>Username </label>
-          <input type="text" name="username" required />
+          <input type="text" name="username" required onChange={handleUserChange}/>
         </div>
         <div className="input-container">
           <label>Password </label>
-          <input type="password" name="password" required />
+          <input type="password" name="password" required onChange={handlePassChange}/>
         </div>
         <div className="button-container">
           <input

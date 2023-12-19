@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './CSS/Sidebar.css';
+import { Context } from "./context";
+import { useContext } from "react";
 
 function Sidebar() {
   const [threatManagementOpen, setThreatManagementOpen] = useState(false);
@@ -24,7 +26,7 @@ function Sidebar() {
       </div>
       <ul className="menu">
         <li><Link to="/logon">Home</Link></li>
-        <li><Link to="/view-profile">View Profile</Link></li>
+        <li><Link to="/viewProfile">View Profile</Link></li>
         <li onClick={handleThreatManagementToggle}>
           <a>Threat Management</a>
           {threatManagementOpen && (
