@@ -9,10 +9,8 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if(request.action === 'sendWebsiteScriptTags'){
-    console.log("content replied");
     const currentScriptContent = request.scriptContents;
     browser.runtime.sendMessage({action:"sendWebsiteSourceCode",currentScriptContent});
-    console.log(currentScriptContent);
   }
 });
 

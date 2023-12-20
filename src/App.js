@@ -2,14 +2,18 @@
 import React from 'react';
 import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import { ContextProvider } from "./context";
-import Login from './Login';
-import Signup from './Signup';
-import Logon from './Logon';
-import ReflectedXSS from './ReflectedXSS';
 import { Context } from "./context";
 import { useContext } from "react";
 import { useState, useEffect } from "react";
+import Login from './Login';
+import Signup from './Signup';
+import Logon from './Logon';
 import ViewProfile from './viewProfile';
+import ReflectedXSS from './ReflectedXSS';
+import DOMXSS from './DOMXSS';
+import AntiCSRF from './AntiCSRF';
+import LibraryValidation from './LibraryValidation';
+import HeaderInspection from './HeaderInspection';
 
 
 function App() {
@@ -28,8 +32,14 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/logon" element={<Logon />} />
-            <Route path="/RXSS" element={<ReflectedXSS />} />
             <Route path="/viewProfile" element={<ViewProfile />}/>
+            <Route path="/RXSS" element={<ReflectedXSS />} />
+            <Route path="/DOMXSS" element={<DOMXSS />} />
+            <Route path="/ACSRF" element={<AntiCSRF />} />
+            <Route path="/JSLIB" element={<LibraryValidation />} />
+            <Route path="/HEADERINSP" element={<HeaderInspection />} />
+            
+            
           </Routes>
         </div>
       </Router>

@@ -1,0 +1,12 @@
+/* Logon.css */
+.LibraryValidation-page {
+    max-width: 500px; /* Adjust this value based on your desired maximum width */
+    margin: 0 auto; /* Center the content */
+  }
+  
+  .LibraryValidation-content {
+    width: 400px; /* Adjust this value based on your desired fixed width */
+    margin-left: 80px; /* Adjust this value based on your sidebar width */
+    height: 500px;
+  }
+  

@@ -12,9 +12,10 @@ function ReflectedXSS() {
   };
 
   browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.action === 'sendWebsiteScriptTags') {
-      const currentScriptContents = message.scriptContents;
-      setScriptContents(currentScriptContents);
+    if (message.action === 'sendWebsiteSourceCode') {
+      console.log("reflectedxss now");
+      const currentScriptContent = message.currentScriptContent;
+      setScriptContents(currentScriptContent);
       setStartIndex(0); // Reset the start index when new content is received
     }
   });

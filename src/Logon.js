@@ -19,8 +19,7 @@ const LogOn = () => {
     <div className="logon-page">
       <Sidebar />
       <div className="logon-content">
-        {/* Logon content goes here */}
-        <h1>Welcome to Logon Page</h1>
+        <h1>Welcome to SurfSafe!</h1>
       </div>
     </div>
   );

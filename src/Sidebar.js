@@ -32,10 +32,10 @@ function Sidebar() {
           {threatManagementOpen && (
             <ul className="submenu">
               <li><Link to="/RXSS">Reflected-XSS</Link></li>
-              <li><Link to="/threat-management/option2">DOM-based XSS</Link></li>
-              <li><Link to="/threat-management/option3">Anti-CSRF tokens</Link></li>
-              <li><Link to="/threat-management/option4">JS libary validation</Link></li>
-              <li><Link to="/threat-management/option5">Header Inspection</Link></li>
+              <li><Link to="/DOMXSS">DOM-based XSS</Link></li>
+              <li><Link to="/ACSRF">Anti-CSRF tokens</Link></li>
+              <li><Link to="/JSLIB">JS libary validation</Link></li>
+              <li><Link to="/HEADERINSP">Header Inspection</Link></li>
               <li><Link to="/threat-management/option6">Consolidation</Link></li>
             </ul>
           )}

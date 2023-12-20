@@ -67,7 +67,7 @@ function Login() {
         // Redirect to Logon page after successful login
         console.log(username);
         //getUser();
-        navigate("/viewProfile");
+        navigate("/logon");
       } else {
         setErrorMessages({ login: response.message });
       } 
