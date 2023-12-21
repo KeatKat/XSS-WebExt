@@ -1,9 +1,10 @@
 // src/Login.js
-import React, { useState } from 'react';
+import React, { useState, useEffect }  from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './CSS/Login.css';
 import { Context } from "./context";
 import { useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 function Login() {
   const [errorMessages, setErrorMessages] = useState({});
@@ -13,6 +14,35 @@ function Login() {
   const [loginUser, setLoginUser] = useContext(Context);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const handleRememberMeChange = () => {
+    setRememberMe(!rememberMe);
+  };
+
+  useEffect(()=>{
+    async function autoLogin() {
+      const response = await fetch("http://localhost:8081/auto-login", {
+        method: "GET",
+        credentials: "include",
+      });
+      const data = await response.json();
+      if (data.status === "success") {
+        setIsSubmitted(true);
+        sessionStorage.setItem("user_id", JSON.stringify(data.user));
+        setLoginUser(data.user);
+        // Redirect to Logon page after successful login
+        console.log(username);
+        //getUser();
+        navigate("/Logon");
+      } else {
+        navigate("/");
+      }
+    }
+    
+      autoLogin();
+    
+  }, []);
 
   /*const handleInputChange = (e) => { 
     //const username = document.forms[0].elements.username.value;
@@ -26,14 +56,13 @@ function Login() {
 
   const handleUserChange = (e) => {
     setUsername(e.target.value);
-    setIsButtonDisabled(username === '' || password === '');
+    setIsButtonDisabled(username === '');
   };
 
   const handlePassChange = (e) => {
     setPassword(e.target.value);
-    setIsButtonDisabled(username === '' || password === '');
+    setIsButtonDisabled(password === '');
   };
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();  
@@ -45,8 +74,8 @@ function Login() {
     try {
       const response = await fetch('http://localhost:8081/login', {
         method: 'POST',
-        headers: {
-          Accept: "application/json",
+        credentials: "include",
+        headers: { 
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -60,14 +89,14 @@ function Login() {
       }
       const data = await response.json();
       console.log(data);
-      if (response.status === 200) {
+      if (data.status === "success") {
         setIsSubmitted(true);
         sessionStorage.setItem("user_id", JSON.stringify(data.user));
         setLoginUser(data.user);
         // Redirect to Logon page after successful login
         console.log(username);
         //getUser();
-        navigate("/logon");
+        navigate("/Logon");
       } else {
         setErrorMessages({ login: response.message });
       } 
@@ -79,7 +108,7 @@ function Login() {
       });
     }
   };
-
+ 
   const renderErrorMessage = (name) =>
     errorMessages[name] && <div className="error">{errorMessages[name]}</div>;
 
@@ -93,6 +122,16 @@ function Login() {
         <div className="input-container">
           <label>Password </label>
           <input type="password" name="password" required onChange={handlePassChange}/>
+        </div>
+        <div className="input-container remember-me">
+          <label>
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={handleRememberMeChange}
+            />
+            Remember Me
+          </label>
         </div>
         <div className="button-container">
           <input
