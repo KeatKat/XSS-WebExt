@@ -1,4 +1,4 @@
-// content.js
+//ReflectedXSS
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'getWebsiteScriptTags') {
     // Get the source code of the current web page
@@ -16,6 +16,14 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
     // Send the extracted script contents to the background script
     browser.runtime.sendMessage({ action: 'sendWebsiteScriptTags', scriptContents });
 
-    console.log("content now");
+  }
+});
+
+
+//DOMXSS
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if(request.action === 'getWebsiteDOM'){
+    const sourceCode = document.documentElement.outerHTML;
+    browser.runtime.sendMessage({action: 'sendWebsiteDOM', sourceCode});
   }
 });

@@ -1,4 +1,4 @@
-// background.js
+//ReflectedXSS
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'checkWebsite') {
     // Send a message to content.js with the source code of the current web page
@@ -14,4 +14,20 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
+
+//DOMXSS
+browser.runtime.onMessage.addListener((request, sender, sendResponse)=>{
+  if(request.action === 'getDOM'){
+    console.log("background1");
+    browser.tabs.query({active: true, currentWindow: true}, (tabs)=>{
+      const activeTab = tabs[0];
+      browser.tabs.sendMessage(activeTab.id, {action: 'getWebsiteDOM'});
+    });
+  }
+
+  if(request.action === 'sendWebsiteDOM'){
+    const webDOM = request.sourceCode;
+    browser.runtime.sendMessage({action:"sendWebsiteDOMcode", webDOM});
+  }
+});
 
