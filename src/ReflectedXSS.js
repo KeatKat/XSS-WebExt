@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import './CSS/ReflectedXSS.css';
 
 function ReflectedXSS() {
   const [scriptContents, setScriptContents] = useState([]);
-  const [startIndex, setStartIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [filteredScripts, setFilteredScripts] = useState([]);
+  const [suspiciousCount, setSuspiciousCount] = useState(0);
 
   const handleCheckWebsite = () => {
     // Send a message to background.js when the button is clicked
@@ -16,16 +18,46 @@ function ReflectedXSS() {
       console.log("reflectedxss now");
       const currentScriptContent = message.currentScriptContent;
       setScriptContents(currentScriptContent);
-      setStartIndex(0); // Reset the start index when new content is received
+      setCurrentIndex(0); // Reset the index when new content is received
     }
   });
 
-  const handleNextLines = () => {
-    setStartIndex(startIndex + 5);
+  useEffect(() => {
+    // Filter scripts when scriptContents changes
+    filterScripts();
+  }, [scriptContents]);
+
+  const filterScripts = () => {
+    // Implement your filtering logic here
+    const filtered = scriptContents.map((content, index) => {
+
+      const maxLength = 200; // Adjust the maximum length as needed
+      const maliciousKeywords = ['eval(', 'document.cookie', 'write(', 'unescape(', 'SetCookie(', 'GetCookie('];
+      const obfuscatedPattern = /\b(?:eval|decodeURIComponent)\(/;
+
+      if (content.length >= maxLength) {
+        return { label: 'Long Lines of Code', content, index };
+      } else if (maliciousKeywords.some((keyword) => content.includes(keyword))) {
+        return { label: 'Malicious Keyword Detected', content, index };
+      } else if (obfuscatedPattern.test(content)) {
+        return { label: 'Obfuscated Code Detected', content, index };
+      }
+
+      // Exclude lines that pass the criteria
+      return null;
+    }).filter(Boolean);
+
+    setFilteredScripts(filtered);
+    setCurrentIndex(0); // Reset the index when new content is received
+    setSuspiciousCount(filtered.length); // Update the suspicious count
   };
 
-  const handlePrevLines = () => {
-    setStartIndex(Math.max(0, startIndex - 5));
+  const handleNextSnippet = () => {
+    setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, filteredScripts.length - 1));
+  };
+
+  const handlePrevSnippet = () => {
+    setCurrentIndex((prevIndex) => Math.max(0, prevIndex - 1));
   };
 
   return (
@@ -46,19 +78,21 @@ function ReflectedXSS() {
           proper input validation and output encoding to mitigate the risk of Reflected XSS.
         </p>
         <button onClick={handleCheckWebsite}>Check Website</button>
+        <p>Suspicious Lines Count: {suspiciousCount}</p>
         <div className="script-contents-display">
-          {scriptContents.slice(startIndex, startIndex + 5).map((content, index) => (
-            <div key={index} className="script-content">
-              <pre>{content}</pre>
+          {filteredScripts.length > 0 && (
+            <div className="script-content">
+              <p>{filteredScripts[currentIndex].label}</p>
+              <pre>{filteredScripts[currentIndex].content}</pre>
             </div>
-          ))}
+          )}
         </div>
         <div className="navigation-buttons">
-          <button onClick={handlePrevLines} disabled={startIndex === 0}>
-            Previous 5 Lines
+          <button onClick={handlePrevSnippet} disabled={currentIndex === 0}>
+            Previous Snippet
           </button>
-          <button onClick={handleNextLines} disabled={startIndex + 5 >= scriptContents.length}>
-            Next 5 Lines
+          <button onClick={handleNextSnippet} disabled={currentIndex === filteredScripts.length - 1}>
+            Next Snippet
           </button>
         </div>
       </div>
