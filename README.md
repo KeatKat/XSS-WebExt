@@ -13,6 +13,11 @@ npm install mysql. if error message says module missing.
 cd XSS-WebExt(parent directory)
 npm start
 
+
+## To run build
+npm install
+npm install dompurify
+
 ## Available Scripts
 
 In the project directory, you can run:
