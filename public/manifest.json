@@ -12,7 +12,8 @@
   "permissions": [
     "activeTab",
     "storage",
-    "tabs"
+    "tabs",
+    "webNavigation"
   ],
   "icons": {
     "48": "sharkicon48.png"

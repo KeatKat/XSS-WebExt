@@ -27,3 +27,29 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
     browser.runtime.sendMessage({action: 'sendWebsiteDOM', sourceCode});
   }
 });
+
+
+
+//Get current URL
+// content.js
+
+// Function to handle messages from the background script
+const handleMessage = (message) => {
+  if (message.action === 'updateURL') {
+    // Update your React component with the new URL
+    updateURLInReactComponent(message.url);
+  }
+};
+
+// Function to update your React component with the new URL
+const updateURLInReactComponent = (url) => {
+  // Your logic to update the URL in your React component
+  console.log('Updating URL in React component:', url);
+  // You can trigger a state update or any other logic you need
+};
+
+// Add a listener for messages from the background script
+browser.runtime.onMessage.addListener(handleMessage);
+
+
+
