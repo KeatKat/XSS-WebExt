@@ -28,6 +28,40 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
+window.addEventListener("load", perftiming, false);
+function perftiming (evt) {
+	    browser.runtime.sendMessage({chrome_message: "msg", count: "0"}, function(response) {
+	});
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  browser.tabs.query({ currentWindow: true, active: true }).then((tabArray) => {
+      const currentTabId = tabArray[0].id;
+      browser.runtime.sendMessage({ type: "getTabInfo", tabId: currentTabId });
+  });
+
+  const checkbox = document.getElementById("disable");
+  checkbox.addEventListener("click", function () {
+      browser.runtime.sendMessage({ type: "toggleDisable", value: checkbox.checked });
+  });
+
+  browser.runtime.onMessage.addListener((message) => {
+      if (message.type === "updatePopup") {
+          const info = document.getElementById("info");
+          const reload = document.getElementById("reload");
+
+          if (message.blockedInfo) {
+              info.innerText = message.blockedInfo;
+              reload.style.display = "block";
+              reload.onclick = function () {
+                  browser.tabs.reload(message.tabId);
+              };
+          }
+      }
+  });
+});
+
+
 
 
 //---------------------------------------------------------------
