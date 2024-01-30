@@ -1,3 +1,5 @@
+
+/*
 //ReflectedXSS
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'getWebsiteScriptTags') {
@@ -28,41 +30,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
-window.addEventListener("load", perftiming, false);
-function perftiming (evt) {
-	    browser.runtime.sendMessage({chrome_message: "msg", count: "0"}, function(response) {
-	});
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-  browser.tabs.query({ currentWindow: true, active: true }).then((tabArray) => {
-      const currentTabId = tabArray[0].id;
-      browser.runtime.sendMessage({ type: "getTabInfo", tabId: currentTabId });
-  });
-
-  const checkbox = document.getElementById("disable");
-  checkbox.addEventListener("click", function () {
-      browser.runtime.sendMessage({ type: "toggleDisable", value: checkbox.checked });
-  });
-
-  browser.runtime.onMessage.addListener((message) => {
-      if (message.type === "updatePopup") {
-          const info = document.getElementById("info");
-          const reload = document.getElementById("reload");
-
-          if (message.blockedInfo) {
-              info.innerText = message.blockedInfo;
-              reload.style.display = "block";
-              reload.onclick = function () {
-                  browser.tabs.reload(message.tabId);
-              };
-          }
-      }
-  });
-});
-
-
-
+*/
 
 //---------------------------------------------------------------
 //Auto reflectedXSS detection
@@ -81,7 +49,7 @@ const handleMessage = (message) => {
 // Function to update your React component with the new URL
 const updateURLInReactComponent = (url) => {
   // Your logic to update the URL in your React component
-  console.log('Updating URL in React component:', url);
+  googleSearch(url);
 
   // Check for potential XSS
   if (url.includes('script')) {
@@ -112,8 +80,7 @@ browser.runtime.onMessage.addListener(handleMessage);
 
 // Send the current URL back to the background script on page load
 handleMessage({ action: 'requestURL' });
-
-
+//----------------------------------------------------------------
 
 //DOM XSS automatic
 // Function to handle messages from the background script for DOM XSS
@@ -145,6 +112,33 @@ const handleDOMXSSMessage = (message) => {
 
 // Add a listener for messages from the background script for DOM XSS
 browser.runtime.onMessage.addListener(handleDOMXSSMessage);
+
+
+
+//-----------------------------------------------------------------
+//Google searching data tracking
+const STORAGE_KEY = 'searchResults';
+function googleSearch(url){
+  if(url.includes('google') && url.includes('search')){
+    const urlObj = new URL(url);
+    const searchParam = urlObj.searchParams.get('q');
+
+
+    browser.storage.local.get(STORAGE_KEY, (result) => {
+      const exisitingResults = result[STORAGE_KEY] || [];
+
+
+      exisitingResults.push(searchParam);
+
+      browser.storage.local.set({[STORAGE_KEY]: exisitingResults});
+
+      console.log(exisitingResults);
+    });
+  }
+}
+//After 3 searches. Show a consolidation
+
+
 
 
 

@@ -31,7 +31,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Logon />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/logon" element={<Logon />} />
             <Route path="/viewProfile" element={<ViewProfile />}/>
             <Route path="/RXSS" element={<ReflectedXSS />} />
             <Route path="/DOMXSS" element={<DOMXSS />} />
