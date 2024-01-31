@@ -5,9 +5,37 @@ const bcrypt = require('bcrypt');
 const user = require("./user");
 const { createUser, getUserByUsername, getAllUsers } = require("./controller");
 
+const { exec } = require('child_process');
+
+
+
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+function checkVulnerabilities(url, callback) {
+    exec(`npx is-website-vulnerable ${url}`, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Execution error: ${error}`);
+            callback({ error: `Execution error: ${error}` });
+            return;
+        }
+        if (stderr) {
+            console.error(`Error: ${stderr}`);
+            callback({ error: `Error: ${stderr}` });
+            return;
+        }
+        callback({ result: stdout }); // Pass the result back via callback
+    });
+}
+
+app.post('/checkVulnerabilities', (req, res) => {
+    const { url } = req.body;
+    checkVulnerabilities(url, (data) => {
+        res.json(data);
+    });
+});
+
 
 const db = mysql.createConnection({
     host: "localhost",

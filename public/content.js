@@ -141,7 +141,7 @@ function googleSearch(url){
 
 window.addEventListener("load", perftiming, false);
 function perftiming (evt) {
-	    browser.runtime.sendMessage({chrome_message: "msg", count: "0"}, function(response) {
+	    browser.runtime.sendMessage({browser_message: "msg", count: "0"}, function(response) {
 	});
 }
 

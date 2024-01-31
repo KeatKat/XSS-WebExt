@@ -13,7 +13,9 @@
     "activeTab",
     "storage",
     "tabs",
-    "webNavigation"
+    "webNavigation",
+    "webRequest",
+    "webRequestBlocking"
   ],
   "icons": {
     "48": "sharkicon48.png"

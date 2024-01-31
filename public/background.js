@@ -238,3 +238,17 @@ function onHeadersReceived(details){
 var wr = browser.webRequest;
 wr.onBeforeSendHeaders.addListener(onBeforeSendHeaders, {urls: ["https://*/*", "http://*/*"]}, ["blocking", "requestHeaders"]);
 wr.onHeadersReceived.addListener(onHeadersReceived, {urls: ["https://*/*", "http://*/*"]}, ["blocking", "responseHeaders"]);
+
+function getCurrentTabUrl(callback) {
+  let queryInfo = {
+    active: true,
+    currentWindow: true
+  };
+
+  browser.tabs.query(queryInfo, (tabs) => {
+    let tab = tabs[0];
+    let url = tab.url;
+    console.log("Current tab's URL: " + url);
+    callback(url);
+  });
+}
