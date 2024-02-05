@@ -84,10 +84,12 @@ handleMessage({ action: 'requestURL' });
 
 //DOM XSS automatic
 // Function to handle messages from the background script for DOM XSS
+
 const handleDOMXSSMessage = (message) => {
   if (message.action === 'checkDOMXSSContent') {
     // Get the HTML content of the page
     const htmlContent = document.documentElement.outerHTML;
+    antiCSRFDetect(htmlContent);
 
     // Check for script tags and the presence of "alert" in the HTML content
     if (htmlContent.includes('<script>') && htmlContent.includes('alert(')) {
@@ -110,6 +112,8 @@ const handleDOMXSSMessage = (message) => {
   }
 };
 
+
+
 // Add a listener for messages from the background script for DOM XSS
 browser.runtime.onMessage.addListener(handleDOMXSSMessage);
 
@@ -117,27 +121,53 @@ browser.runtime.onMessage.addListener(handleDOMXSSMessage);
 
 //-----------------------------------------------------------------
 //Google searching data tracking
-const STORAGE_KEY = 'searchResults';
+let uniqueUserId
+// Function to handle messages from the background script
+const handleUniqueUserIdMessage = (message) => {
+  if (message.action === 'getUniqueUserId') {
+    // Handle the unique user ID received from the background script
+    uniqueUserId = message.uniqueUserId;
+  }
+};
+
+// Add a listener for messages from the background script
+browser.runtime.onMessage.addListener(handleUniqueUserIdMessage);
+
+// Request the unique user ID from the background script
+browser.runtime.sendMessage({ action: 'getUniqueUserId' });
+
+
+
 function googleSearch(url){
   if(url.includes('google') && url.includes('search')){
     const urlObj = new URL(url);
     const searchParam = urlObj.searchParams.get('q');
+    //getting time stamp 
+    const timestamp = new Date().toISOString();
 
-
-    browser.storage.local.get(STORAGE_KEY, (result) => {
-      const exisitingResults = result[STORAGE_KEY] || [];
-
-
-      exisitingResults.push(searchParam);
-
-      browser.storage.local.set({[STORAGE_KEY]: exisitingResults});
-
-      console.log(exisitingResults);
-    });
+    const newSearchResult = {
+      userId: uniqueUserId,
+      query: searchParam,
+      timestamp: timestamp,
+    };
+    console.log(newSearchResult);
   }
 }
 //After 3 searches. Show a consolidation
-//comment test
+//---------------------------------------------------------------------
+//Anti CSRF detection (automatic)
+function antiCSRFDetect(html){
+  if (html.includes('<input type="hidden" name="csrftoken"')){
+    console.log("Anti-CSRF tokens detected");
+
+  }
+}
+
+
+
+
+//------------------------------------------------------------------------
+
 
 window.addEventListener("load", perftiming, false);
 function perftiming (evt) {

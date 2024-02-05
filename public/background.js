@@ -90,8 +90,51 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 //-----------------------------------------------------------------
-//Google searching data tracking
+//google searching
+//Assigning a unique user id stored locally in the user's browser
 
+const generateUniqueUserId = () => {
+  return Math.random().toString(36).substring(2,9);
+};
+
+const getUniqueUserId = () => {
+  return localStorage.getItem('uniqueUserId');
+};
+
+const initializeOrRetrieveUniqueId = () => {
+  let uniqueUserId = getUniqueUserId();
+
+  if(!uniqueUserId) {
+    uniqueUserId = generateUniqueUserId();
+    localStorage.setItem('uniqueUserId', uniqueUserId);
+  }
+
+  return uniqueUserId;
+};
+
+
+// Listen for messages from the content script
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === 'getUniqueUserId') {
+    // Respond with the unique user ID
+    const uniqueUserId = initializeOrRetrieveUniqueId();
+
+    // Use browser.tabs.sendMessage to send the response to the content script
+    browser.tabs.sendMessage(sender.tab.id, { action: 'getUniqueUserId', uniqueUserId });
+
+    // Note: Since sendResponse may not work in all cases, this is an alternative approach
+  }
+});
+
+//--------------------------------------------------------------
+//AntiCSRF automatic detection
+
+
+
+
+
+
+//---------------------------------------------------------------
 //header inspection
 
 let visitedTabs = {};
