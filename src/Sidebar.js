@@ -27,6 +27,7 @@ function Sidebar() {
       <ul className="menu">
         <li><Link to="/logon">Home</Link></li>
         <li><Link to="/viewProfile">View Profile</Link></li>
+        <li><Link to="/PreCheckURL">Check URL</Link></li>
         <li onClick={handleThreatManagementToggle}>
           <a>Threat Management</a>
           {threatManagementOpen && (

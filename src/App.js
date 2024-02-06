@@ -13,6 +13,7 @@ import AntiCSRF from './AntiCSRF';
 import LibraryValidation from './LibraryValidation';
 import HeaderInspection from './HeaderInspection';
 import Report from './report';
+import PreCheckURL from './PreCheckURL';
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
             <Route path="/JSLIB" element={<LibraryValidation />} />
             <Route path="/HEADERINSP" element={<HeaderInspection />} />
             <Route path="/REPORT" element={<Report />} />
+            <Route path='/PreCheckURL' element={<PreCheckURL />} />
             
             
           </Routes>
