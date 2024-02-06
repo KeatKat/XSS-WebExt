@@ -295,3 +295,54 @@ function getCurrentTabUrl(callback) {
     callback(url);
   });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Report Handling
+//RXSS
+let containRXSSStatus = false;
+
+// Listen for messages from the content script and handle the containRXSS update
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === 'updateRXSSStatus') {
+    // Update the status of containRXSS
+    containRXSSStatus = message.containRXSS;
+  } else if (message.action === 'getRXSSStatus') {
+    // Send the current status of containRXSS to the report page
+    sendResponse({ containRXSS: containRXSSStatus });
+  }
+});
+
+//DOMXSS
+let containDOMXSSStatus = false;
+
+// Listen for messages from the content script and handle the containDOMXSS update
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === 'updateDOMXSSStatus') {
+    // Update the status of containDOMXSS
+    containDOMXSSStatus = message.containDOMXSS;
+  } else if (message.action === 'getDOMXSSStatus') {
+    // Send the current status of containDOMXSS to the report page
+    sendResponse({ containDOMXSS: containDOMXSSStatus });
+  }
+});
+
+
+
+
+

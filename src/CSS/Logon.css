@@ -9,3 +9,8 @@
   margin-left: 80px; /* Adjust this value based on your sidebar width */
   height: 500px;
 }
+
+.article-image {
+  width: 200px; /* Make the image fill the container width */
+  height: auto; /* Let the height adjust automatically to maintain the aspect ratio */
+}

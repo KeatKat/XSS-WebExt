@@ -36,7 +36,7 @@ function Sidebar() {
               <li><Link to="/ACSRF">Anti-CSRF tokens</Link></li>
               <li><Link to="/JSLIB">JS libary validation</Link></li>
               <li><Link to="/HEADERINSP">Header Inspection</Link></li>
-              <li><Link to="/threat-management/option6">Consolidation</Link></li>
+              <li><Link to="/REPORT">Consolidation</Link></li>
             </ul>
           )}
         </li>

@@ -50,9 +50,12 @@ const handleMessage = (message) => {
 const updateURLInReactComponent = (url) => {
   // Your logic to update the URL in your React component
   googleSearch(url);
-
+  let containRXSS = false;
   // Check for potential XSS
   if (url.includes('script')) {
+    containRXSS = true;
+    //Send over data to background
+    browser.runtime.sendMessage({ action: 'updateRXSSStatus', containRXSS });
     // First confirmation prompt
     if (confirm('This website may contain a potential XSS attack. Do you want to continue?')) {
       // User clicked OK in the first prompt
@@ -71,8 +74,13 @@ const updateURLInReactComponent = (url) => {
       window.location.href = 'https://www.google.com';
     }
   }
+  else{
+    browser.runtime.sendMessage({ action: 'updateRXSSStatus', containRXSS });
 
-  // You can trigger a state update or any other logic you need
+  }
+  
+
+
 };
 
 // Add a listener for messages from the background script
@@ -90,9 +98,13 @@ const handleDOMXSSMessage = (message) => {
     // Get the HTML content of the page
     const htmlContent = document.documentElement.outerHTML;
     antiCSRFDetect(htmlContent);
-
+    let containDOMXSS = false;
     // Check for script tags and the presence of "alert" in the HTML content
     if (htmlContent.includes('<script>') && htmlContent.includes('alert(')) {
+      containDOMXSS = true;
+      browser.runtime.sendMessage({ action: 'updateDOMXSSStatus', containDOMXSS });
+
+
       // Prompt the user if they want to continue
       const userResponse = confirm('This website may contain a potential DOM-based XSS attack. Do you want to continue?');
 
@@ -108,6 +120,9 @@ const handleDOMXSSMessage = (message) => {
         // Redirect the user back to Google
         browser.runtime.sendMessage({ action: 'redirectGoogle' });
       }
+    }
+    else {
+      browser.runtime.sendMessage({ action: 'updateDOMXSSStatus', containDOMXSS });
     }
   }
 };

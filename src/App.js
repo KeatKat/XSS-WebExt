@@ -1,9 +1,7 @@
 // src/App.js
 import React from 'react';
 import { HashRouter as Router, Route, Routes } from 'react-router-dom';
-import { ContextProvider } from "./context";
 import { Context } from "./context";
-import { useContext } from "react";
 import { useState, useEffect } from "react";
 import Login from './Login';
 import Signup from './Signup';
@@ -14,6 +12,7 @@ import DOMXSS from './DOMXSS';
 import AntiCSRF from './AntiCSRF';
 import LibraryValidation from './LibraryValidation';
 import HeaderInspection from './HeaderInspection';
+import Report from './report';
 
 
 function App() {
@@ -37,6 +36,7 @@ function App() {
             <Route path="/ACSRF" element={<AntiCSRF />} />
             <Route path="/JSLIB" element={<LibraryValidation />} />
             <Route path="/HEADERINSP" element={<HeaderInspection />} />
+            <Route path="/REPORT" element={<Report />} />
             
             
           </Routes>
