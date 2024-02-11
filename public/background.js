@@ -126,6 +126,44 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
+browser.webNavigation.onCompleted.addListener(details => {
+  // Check if the URL is a Google search
+  if (details.url.includes('google.com/search?')) {
+    const urlObj = new URL(details.url);
+    const searchParam = urlObj.searchParams.get('q');
+    const timestamp = new Date().toISOString();
+
+    const userId = getUniqueUserId();
+
+    saveLog({userId, query: searchParam, timestamp});
+  }
+}, {url: [{hostContains: '.google.com'}]});
+
+
+async function saveLog(searchResult) {
+  console.log(searchResult.query);
+  const response = await fetch('http://localhost:8081/createLog', {
+    method: 'POST',
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      userId: searchResult.userId,
+      searches: searchResult.query,
+      timestamp: searchResult.timestamp
+    }),
+  });
+
+  //.then(response => response.json())
+  //.then(data => console.log('Search result saved:', data))
+  //.catch((error) => console.error('Error saving search result:', error));
+
+  const data = await response.json();
+  console.log(data);
+}
+
+
 //--------------------------------------------------------------
 //AntiCSRF automatic detection
 
@@ -295,22 +333,6 @@ function getCurrentTabUrl(callback) {
     callback(url);
   });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //Report Handling

@@ -4,7 +4,7 @@ const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "webext"
+    database: "test"
 });
 
 // Function to create a new user
@@ -16,6 +16,19 @@ const createUser = (username, password, fullname, email) => {
         }
     });
 };
+
+const createLog = (userId, searches, timestamp) => {
+    const insertLog = "INSERT INTO log (userId, searches, timestamp) VALUES (?, ?, ?)";
+    db.query(insertLog, [userId, searches, timestamp], (err, result) => {
+        if (err) {
+            console.error("error saving log: ", err);
+            //reject(err);
+        } else {
+            //resolve(result);
+        }
+    });
+};
+
 
 // Function to get a user by username
 const getUserByUsername = (username) => {
@@ -49,4 +62,4 @@ const getAllUsers = () => {
     });
 };
 
-module.exports = { createUser, getUserByUsername, getAllUsers };
+module.exports = { createUser, getUserByUsername, getAllUsers, createLog };
