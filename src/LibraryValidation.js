@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import './CSS/LibraryValidation.css';
+import DOMPurify from 'dompurify';
 
 function LibraryValidation() {
   const [url, setUrl] = useState('');
   const [vulnerabilities, setVulnerabilities] = useState([]);
   const [isChecking, setIsChecking] = useState(false);
+
+  // Helper function to extract vulnerabilities from the response data
+  const extractVulnerabilities = (text) => {
+    const jsLibraryPattern = /\b([a-zA-Z0-9_\-]+)@([0-9]+\.[0-9]+\.[0-9]+)\b/;
+    const match = text.match(jsLibraryPattern);
+    if (match) {
+      return `${match[1]}@${match[2]}`;
+    }
+    return 'No vulnerable libraries';
+  };
 
   // Function to check vulnerabilities
   const checkVulnerabilities = async (url) => {
@@ -19,7 +30,11 @@ function LibraryValidation() {
         body: JSON.stringify({ url }),
       });
       const data = await response.json();
-      setVulnerabilities(data.vulnerabilities || []);
+      console.log(data);
+
+      // Parse the response data to extract vulnerabilities
+      var parsedVulnerabilities = JSON.stringify(data.stdout);
+      setVulnerabilities(extractVulnerabilities(parsedVulnerabilities));
     } catch (error) {
       console.error('Error checking vulnerabilities:', error);
       setVulnerabilities([]);
@@ -63,18 +78,21 @@ function LibraryValidation() {
         ) : (
           <div>
             <h2>URL: {url}</h2>
-            {vulnerabilities.length > 0 ? (
+            {/*vulnerabilities.length > 0 ? (
               <div>
                 <h3>Vulnerabilities Found:</h3>
                 <ul>
-                  {vulnerabilities.map((vuln, index) => (
-                    <li key={index}>{vuln}</li>
+                  {vulnerabilities.map((vul, index) => (
+                    <li key={index}>
+                      Library: {vul.library}, Count: {vul.count}, Link: <a href={vul.link} target="_blank" rel="noopener noreferrer">Details</a>
+                    </li>
                   ))}
                 </ul>
               </div>
             ) : (
               <p>No vulnerabilities found.</p>
-            )}
+            )*/}
+            <p>Vulnerable libraries present: {DOMPurify.sanitize(vulnerabilities)}</p>
           </div>
         )}
       </div>

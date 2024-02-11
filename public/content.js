@@ -49,7 +49,7 @@ const handleMessage = (message) => {
 // Function to update your React component with the new URL
 const updateURLInReactComponent = (url) => {
   // Your logic to update the URL in your React component
-  googleSearch(url);
+  //googleSearch(url);
   let containRXSS = false;
   // Check for potential XSS
   if (url.includes('script')) {
@@ -153,21 +153,8 @@ browser.runtime.sendMessage({ action: 'getUniqueUserId' });
 
 
 
-function googleSearch(url){
-  if(url.includes('google') && url.includes('search')){
-    const urlObj = new URL(url);
-    const searchParam = urlObj.searchParams.get('q');
-    //getting time stamp 
-    const timestamp = new Date().toISOString();
 
-    const newSearchResult = {
-      userId: uniqueUserId,
-      query: searchParam,
-      timestamp: timestamp,
-    };
-    console.log(newSearchResult);
-  }
-}
+
 //After 3 searches. Show a consolidation
 //---------------------------------------------------------------------
 //Anti CSRF detection (automatic)
