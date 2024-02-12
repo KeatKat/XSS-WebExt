@@ -5,6 +5,7 @@ import './CSS/Report.css';
 function Report() {
   const [containRXSS, setContainRXSS] = useState(false);
   const [containDOMXSS, setContainDOMXSS] = useState(false);
+  const [vulnerabilities, setVulnerabilities] = useState([]);
 
   // Fetch the status of containRXSS from the background script when the component mounts
   useEffect(() => {
@@ -28,6 +29,20 @@ function Report() {
     });
   }, []);
 
+  useEffect(() => {
+    const fetchVulnerabilities = async () => {
+        try {
+            const response = await browser.runtime.sendMessage({ action: 'getVulnerabilities' });
+            setVulnerabilities(response.vuln || []);
+        } catch (error) {
+            console.error('Error fetching vulnerabilities:', error);
+            setVulnerabilities([]);
+        }
+    };
+
+    fetchVulnerabilities();
+}, []);
+
 
 
 
@@ -38,6 +53,11 @@ function Report() {
         <h1>Consolidated report and risk score</h1>
         <p>{containRXSS ? 'Potential XSS detected!' : 'No potential XSS detected.'}</p>
         <p>{containDOMXSS ? 'Potential DOM-based XSS detected!' : 'No DOM-based XSS detected'}</p>
+        {vulnerabilities.length > 0 ? (
+                    vulnerabilities
+                ) : (
+                    <p>No vulnerabilities found.</p>
+                )}
       </div>
     </div>
   );

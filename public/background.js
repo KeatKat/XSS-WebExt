@@ -364,7 +364,56 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
+let vuln = "";
 
+function extractVulnerabilities(text) {
+  const jsLibraryPattern = /\b([a-zA-Z0-9_\-]+)@([0-9]+\.[0-9]+\.[0-9]+)\b/;
+  const match = text.match(jsLibraryPattern);
+  if (match) {
+    return `${match[1]}@${match[2]}`;
+  }
+  return 'No vulnerable libraries';
+}
 
+async function checkVulnerabilities(url) {
+  try {
+    const response = await fetch('http://localhost:8081/checkVulnerabilities', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ url }),
+    });
+    const data = await response.json();
+    console.log(data);
+
+    // Parse the response data to extract vulnerabilities
+    var parsedVulnerabilities = JSON.stringify(data.stdout);
+    var vulnerabilities = extractVulnerabilities(parsedVulnerabilities);
+    vuln = vulnerabilities;
+
+  } catch (error) {
+    console.error('Error checking vulnerabilities:', error);
+  }
+}
+
+browser.tabs.onActivated.addListener(async (activeInfo) => {
+  const tab = await browser.tabs.get(activeInfo.tabId);
+  if (tab.url && !tab.url.startsWith("moz-extension://")) {
+    checkVulnerabilities(tab.url);
+  }
+});
+
+browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status === 'complete' && tab.url && !tab.url.startsWith("moz-extension://")) {
+    checkVulnerabilities(tab.url);
+  }
+});
+
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "getVulnerabilities") {
+      sendResponse({ vuln });
+  }
+});
 
 
