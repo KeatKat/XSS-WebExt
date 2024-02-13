@@ -1,82 +1,56 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Sidebar from './Sidebar';
-import DOMPurify from 'dompurify';
 import './CSS/DOMXSS.css';
 
 function DOMXSS() {
-  const [originalDOMContents, setOriginalDOMContents] = useState('');
-  const [sanitizedDOMContents, setSanitizedDOMContents] = useState('');
-  const [removedLines, setRemovedLines] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [url, setUrl] = useState('');
+  const [vulnerabilityDetected, setVulnerabilityDetected] = useState(false);
+  const [maliciousPart, setMaliciousPart] = useState('');
 
-  const handleCheckWebsite = () => {
-    browser.runtime.sendMessage({ action: 'getDOM' });
-  };
-
-  useEffect(() => {
-    // Check and sanitize the DOM contents when it changes
-    const sanitizedHTML = DOMPurify.sanitize(originalDOMContents);
-
-    // Identify lines that have been removed
-    const originalLines = originalDOMContents.split('\n');
-    const sanitizedLines = sanitizedHTML.split('\n');
-    const removed = originalLines.filter((line, index) => sanitizedLines[index] !== line);
-
-    setSanitizedDOMContents(sanitizedHTML);
-    setRemovedLines(removed);
-    setCurrentIndex(0); // Reset the index when new content is received
-  }, [originalDOMContents]);
-
-  browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.action === 'sendWebsiteDOMcode') {
-      const webDOM = message.webDOM;
-      setOriginalDOMContents(webDOM);
+  const handleCheckURL = () => {
+    const scriptIndex = url.indexOf('<script>');
+    if (scriptIndex !== -1) {
+      setVulnerabilityDetected(true);
+      const startIndex = Math.max(0, scriptIndex - 20); // Start 20 characters before '<script>'
+      const endIndex = scriptIndex + 8; // End 8 characters after '<script>'
+      setMaliciousPart(url.substring(startIndex, endIndex));
+    } else {
+      setVulnerabilityDetected(false);
+      setMaliciousPart('');
     }
-  });
-
-  const handleNextSnippet = () => {
-    setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, removedLines.length - 1));
-  };
-
-  const handlePrevSnippet = () => {
-    setCurrentIndex((prevIndex) => Math.max(0, prevIndex - 1));
   };
 
   return (
     <div className="DOMXSS-page">
       <Sidebar />
       <div className="DOMXSS-content">
-        <h1>What is DOM XSS</h1>
+      <h1>What is Reflected XSS</h1>
         <p>
-          DOM-based Cross-Site Scripting (DOM XSS) is a type of security vulnerability
-          where the attack payload is executed as a result of modifying the Document Object Model (DOM)
-          of a web page. Unlike traditional XSS, which involves the server reflecting malicious
-          input, DOM XSS occurs entirely on the client-side. Attackers manipulate the DOM through
-          user-controlled input to inject and execute malicious scripts.
+          Reflected Cross-Site Scripting (XSS) is a type of security vulnerability
+          where an attacker injects malicious scripts into a web application, and
+          these scripts are then reflected off a web server to the victim's browser.
+          The attack is often delivered through a URL or other input fields that
+          echo user input without proper validation.
         </p>
         <p>
-          The consequences of DOM XSS can include unauthorized access to user data, session hijacking,
-          and the theft of sensitive information. Web developers must implement proper input validation
-          and ensure that user-controlled input does not directly influence the DOM in unsafe ways to
-          mitigate the risk of DOM-based XSS attacks.
+          The consequences of Reflected XSS can include theft of sensitive information,
+          session hijacking, and defacement of websites. Web developers must implement
+          proper input validation and output encoding to mitigate the risk of Reflected XSS.
         </p>
-        <button onClick={handleCheckWebsite}>Check Website</button>
-        {removedLines.length > 0 && (
-          <div className="removed-lines">
-            <h2>Removed Lines</h2>
-            <p>{`Snippet ${currentIndex + 1} of ${removedLines.length}`}</p>
-            <pre>{removedLines[currentIndex]}</pre>
-            <div className="navigation-buttons">
-              <button onClick={handlePrevSnippet} disabled={currentIndex === 0}>
-                Previous Snippet
-              </button>
-              <button
-                onClick={handleNextSnippet}
-                disabled={currentIndex === removedLines.length - 1}
-              >
-                Next Snippet
-              </button>
-            </div>
+        <div className="url-input-container">
+          <input
+            type="text"
+            placeholder="Enter URL"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+          />
+          <button onClick={handleCheckURL}>Check URL</button>
+        </div>
+        {vulnerabilityDetected && (
+          <div className="vulnerability-detected">
+            <h2>Potential DOM-based XSS Detected!</h2>
+            <p>This URL may contain a potential DOM-based XSS vulnerability.</p>
+            <p>Highlighted Malicious Part: <span className="malicious-part">{maliciousPart}</span></p>
           </div>
         )}
       </div>

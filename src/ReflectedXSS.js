@@ -1,3 +1,6 @@
+//this is actually DOM XSS
+
+
 import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import './CSS/ReflectedXSS.css';
@@ -64,18 +67,19 @@ function ReflectedXSS() {
     <div className="RXSS-page">
       <Sidebar />
       <div className="RXSS-content">
-        <h1>What is Reflected XSS</h1>
+        <h1>What is DOM XSS</h1>
         <p>
-          Reflected Cross-Site Scripting (XSS) is a type of security vulnerability
-          where an attacker injects malicious scripts into a web application, and
-          these scripts are then reflected off a web server to the victim's browser.
-          The attack is often delivered through a URL or other input fields that
-          echo user input without proper validation.
+          DOM-based Cross-Site Scripting (DOM XSS) is a type of security vulnerability
+          where the attack payload is executed as a result of modifying the Document Object Model (DOM)
+          of a web page. Unlike traditional XSS, which involves the server reflecting malicious
+          input, DOM XSS occurs entirely on the client-side. Attackers manipulate the DOM through
+          user-controlled input to inject and execute malicious scripts.
         </p>
         <p>
-          The consequences of Reflected XSS can include theft of sensitive information,
-          session hijacking, and defacement of websites. Web developers must implement
-          proper input validation and output encoding to mitigate the risk of Reflected XSS.
+          The consequences of DOM XSS can include unauthorized access to user data, session hijacking,
+          and the theft of sensitive information. Web developers must implement proper input validation
+          and ensure that user-controlled input does not directly influence the DOM in unsafe ways to
+          mitigate the risk of DOM-based XSS attacks.
         </p>
         <button onClick={handleCheckWebsite}>Check Website</button>
         <p>Suspicious Lines Count: {suspiciousCount}</p>

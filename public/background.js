@@ -1,5 +1,4 @@
 
-/*
 //ReflectedXSS
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'checkWebsite') {
@@ -32,7 +31,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse)=>{
     browser.runtime.sendMessage({action:"sendWebsiteDOMcode", webDOM});
   }
 });
-*/
+
 
 
 //-----------------------------------------------------------

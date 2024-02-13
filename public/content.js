@@ -1,5 +1,4 @@
 
-/*
 //ReflectedXSS
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'getWebsiteScriptTags') {
@@ -30,7 +29,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
-*/
+
 
 //---------------------------------------------------------------
 //Auto reflectedXSS detection
@@ -160,7 +159,7 @@ browser.runtime.sendMessage({ action: 'getUniqueUserId' });
 //Anti CSRF detection (automatic)
 function antiCSRFDetect(html){
   if (html.includes('<input type="hidden" name="csrftoken"')){
-    console.log("Anti-CSRF tokens detected");
+    alert("Anti-CSRF tokens detected");
 
   }
 }

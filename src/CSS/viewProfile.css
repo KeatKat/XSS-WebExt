@@ -1,12 +1,24 @@
-/* Logon.css */
+/* viewProfile.css */
 .profile-page {
-    max-width: 500px; /* Adjust this value based on your desired maximum width */
-    margin: 0 auto; /* Center the content */
-  }
-  
-  .profile-content {
-    width: 400px; /* Adjust this value based on your desired fixed width */
-    margin-left: 80px; /* Adjust this value based on your sidebar width */
-    height: 500px;
-  }
-  
+  max-width: 500px; /* Adjust this value based on your desired maximum width */
+  margin: 0 auto; /* Center the content */
+}
+
+.profile-content {
+  width: 400px; /* Adjust this value based on your desired fixed width */
+  margin-left: 80px; /* Adjust this value based on your sidebar width */
+  height: 500px;
+}
+
+.profile-details {
+  display: flex;
+  align-items: center;
+}
+
+.profile-image img {
+  width: 100px; /* Adjust the size of the profile image */
+  height: 100px; /* Adjust the size of the profile image */
+  border-radius: 50%; /* Make the image circular */
+  object-fit: cover; /* Ensure the image covers the entire circular area */
+  margin-right: 20px; /* Adjust spacing between image and text */
+}
