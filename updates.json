@@ -2,7 +2,7 @@
     "addons": {
       "{abcd1234-1abc-1234-12ab-abcdef123456}": {
         "version": "1.0",
-        "update_link": "https://github.com/KeatKat/XSS-WebExt/"
+        "update_link": "https://github.com/KeatKat/XSS-WebExt/blob/main/web-ext-artifacts/web_security_inspector-1.0.xpi"
       }
     }
   }
