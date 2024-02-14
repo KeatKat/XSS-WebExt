@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Login Extension",
-  "version": "1.0",
-  "description": "A simple login extension",
+  "name": "Web Security Inspector",
+  "version": "2.0",
+  "description": "Client-Side Web Seccurity Inspector",
   "browser_action": {
     "default_icon": {
       "48": "sharkicon48.png"
@@ -20,6 +20,7 @@
   "icons": {
     "48": "sharkicon48.png"
   },
+  "update_url": "https://github.com/KeatKat/XSS-WebExt/updates.json",
   "applications": {
     "gecko": {
       "id": "login-extension@example.com",

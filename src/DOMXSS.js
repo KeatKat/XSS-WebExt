@@ -12,8 +12,12 @@ function DOMXSS() {
     if (scriptIndex !== -1) {
       setVulnerabilityDetected(true);
       const startIndex = Math.max(0, scriptIndex - 20); // Start 20 characters before '<script>'
-      const endIndex = scriptIndex + 8; // End 8 characters after '<script>'
-      setMaliciousPart(url.substring(startIndex, endIndex));
+      const endIndex = url.indexOf('<', scriptIndex + 1); // Find the next '<' after '<script>'
+      if (endIndex !== -1) {
+        setMaliciousPart(url.substring(startIndex, endIndex));
+      } else {
+        setMaliciousPart(url.substring(startIndex));
+      }
     } else {
       setVulnerabilityDetected(false);
       setMaliciousPart('');
@@ -24,7 +28,7 @@ function DOMXSS() {
     <div className="DOMXSS-page">
       <Sidebar />
       <div className="DOMXSS-content">
-      <h1>What is Reflected XSS</h1>
+        <h1>What is Reflected XSS</h1>
         <p>
           Reflected Cross-Site Scripting (XSS) is a type of security vulnerability
           where an attacker injects malicious scripts into a web application, and
@@ -46,11 +50,15 @@ function DOMXSS() {
           />
           <button onClick={handleCheckURL}>Check URL</button>
         </div>
-        {vulnerabilityDetected && (
+        {vulnerabilityDetected ? (
           <div className="vulnerability-detected">
-            <h2>Potential DOM-based XSS Detected!</h2>
-            <p>This URL may contain a potential DOM-based XSS vulnerability.</p>
+            <h2>Potential Reflected XSS Detected!</h2>
+            <p>This URL may contain a potential Reflected XSS vulnerability.</p>
             <p>Highlighted Malicious Part: <span className="malicious-part">{maliciousPart}</span></p>
+          </div>
+        ) : (
+          <div className="no-vulnerability-detected">
+            <h2>No vulnerabilities detected for the current website.</h2>
           </div>
         )}
       </div>

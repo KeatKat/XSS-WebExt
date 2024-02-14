@@ -9,4 +9,34 @@
     margin-left: 80px; /* Adjust this value based on your sidebar width */
     height: 500px;
   }
+
+  /* Report.css */
+.loading-bar {
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+
+.loading-bar:before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin-top: -20px;
+  margin-left: -20px;
+  border-radius: 50%;
+  border: 3px solid #ccc;
+  border-top-color: #007bff;
+  animation: loading-spinner 1s linear infinite;
+}
+
+@keyframes loading-spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
   
